@@ -10,12 +10,36 @@ class Counter extends React.Component {
         this.handleReset = this.handleReset.bind(this)
     }
 
+    componentDidMount() {
+
+        try {
+
+            let num = localStorage.getItem('count')
+
+            console.log(num)
+
+            this.setState(() => ({count: num}))
+
+        }catch(e) {
+            alert(e)
+        }
+
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+
+        localStorage.setItem('count', this.state.count)
+    }
+
     handleAddOne() {
+
         this.setState((prevState) => {
             return {
                 count: prevState.count + 1
             }
         })
+
+
     }
 
     handleSubtractOne() {
