@@ -1,19 +1,15 @@
 import React from 'react';
-import {NavLink} from 'react-router-dom';
-import Project from './Project';
+import {NavLink, Link} from 'react-router-dom';
 
 const Portfolio = (props) => {
 
     return (
     <div>
-        <NavLink path="/portfolio/123" component={Project}>Project 123</NavLink>
-        {/* <NavLink path="/portfolio/ABC">Project ABC</NavLink> */}
-        
+        <Link to="/portfolio/123">Project 123</Link>        
     </div>
 
     )
 
 }
-
 
 export default Portfolio;

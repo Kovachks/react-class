@@ -1,11 +1,8 @@
 import React from 'react';
 
 const Project = (props) => {
-
-    console.log(props.match)
-
     return (
-        <div>This is my project {props.match}</div>
+        <div>This is my project {props.match.params.project}</div>
     )
 }
 
