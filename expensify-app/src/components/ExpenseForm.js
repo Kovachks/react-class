@@ -3,9 +3,6 @@ import moment from 'moment';
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 
-// const date = new Date();
-const now = moment();
-
 export default class ExpenseForm extends React.Component {
     
     state = {
@@ -13,7 +10,8 @@ export default class ExpenseForm extends React.Component {
         textArea: '',
         amount: '',
         createdAt: moment(),
-        calendarFocused: false
+        calendarFocused: false,
+        error: ''
     };
 
     componentDidMount = () => {
@@ -35,7 +33,7 @@ export default class ExpenseForm extends React.Component {
 
     onAmountChange = (e) => {
         const amount = e.target.value;
-        if (amount.match(/^\d*(\.\d{0,2})?$/)) {
+        if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
             this.setState(() => (
                 { amount }
             ))
@@ -43,17 +41,38 @@ export default class ExpenseForm extends React.Component {
     };
 
     onDateChange = (createdAt) => {
-        this.setState(() => ({ createdAt }))
+         if (createdAt) {
+            this.setState(() => ({ createdAt }))
+         }
     };
 
     onFocusChange = ({ focused }) => {
         this.setState(() => ({ calendarFocused: focused })) 
     }
     
+    onSubmit = (e) => {
+        e.preventDefault();
+
+        if (!this.state.description || !this.state.amount) {          
+            this.setState(() => ({error: 'Please post a valid description and value'}))
+        } else {
+            // Clear the error
+            this.setState(() => ({error: ''}))
+            this.props.onSubmit({
+                description: this.state.description, 
+                amount: parseFloat(this.state.amount, 10) * 100,
+                textArea: this.state.textArea,
+                createdAt: this.state.createdAt.valueOf(),
+                note: this.state.note
+            })
+        };
+    };
+
     render() {
         return (
             <div>
-                <form>
+                {!this.state.error == '' && <p>{this.state.error}</p>}
+                <form onSubmit={this.onSubmit}>
                     <input 
                         type="text"
                         placeholder="Description"
