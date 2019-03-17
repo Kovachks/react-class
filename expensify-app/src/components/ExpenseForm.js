@@ -4,19 +4,19 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 
 export default class ExpenseForm extends React.Component {
-    
-    state = {
-        description: '',
-        textArea: '',
-        amount: '',
-        createdAt: moment(),
-        calendarFocused: false,
-        error: ''
-    };
+    constructor(props) {
+        super(props);
 
-    componentDidMount = () => {
-        console.log(this.state.createdAt)
+        this.state = {
+            description: props.expense ? props.expense.description : '',
+            textArea: props.expense ? props.expense.note : '',
+            amount: props.expense ? (props.expense.amount / 100).toString() : '',
+            createdAt: props.expense ? moment(props.expense.createdAt) : moment(),
+            calendarFocused: false,
+            error: ''
+        };
     }
+
     onDescriptionChange = (e) => {
         const description = e.target.value;
         this.setState(() => (
@@ -63,7 +63,7 @@ export default class ExpenseForm extends React.Component {
                 amount: parseFloat(this.state.amount, 10) * 100,
                 textArea: this.state.textArea,
                 createdAt: this.state.createdAt.valueOf(),
-                note: this.state.note
+                note: this.state.textArea
             })
         };
     };
