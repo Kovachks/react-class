@@ -1,5 +1,11 @@
 import expensesReducer from '../../reducers/expenses';
 import uuid from 'uuid';
+import expenses from '../fixtures/expenses'
+
+test('should setup default filter values', () => {
+    const state = expensesReducer(undefined, {type: '@@INIT'});
+    expect(state).toEqual([])
+});
 
 test('should add expense', () => {
     const currentState = [];
@@ -24,19 +30,23 @@ test('should add expense', () => {
 });
 
 test('shold remove expense', () => {
-    const currentState = [{
-        id: 'test',
-        description: 'Rent',
-        note: '',
-        amount: 100,
-        createdAt: 1000
-    }]
+
     const action = {
         type: 'REMOVE_EXPENSE',
-        id: 'test'
+        id: expenses[1].id
     }
-    const state = expensesReducer(currentState, action);
-    expect(state[0]).toBe(undefined)
+    const state = expensesReducer(expenses, action);
+    expect(state.length).toBe(2)
+});
+
+test('shold not remove expenses if id isnot found', () => {
+
+    const action = {
+        type: 'REMOVE_EXPENSE',
+        id: 'teadsasa'
+    }
+    const state = expensesReducer(expenses, action);
+    expect(state.length).toBe(3)
 });
 
 test('shold modify expense', () => {
